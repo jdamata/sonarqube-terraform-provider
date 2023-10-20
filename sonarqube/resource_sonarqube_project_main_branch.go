@@ -63,7 +63,7 @@ func resourceSonarqubeProjectMainBranchCreate(d *schema.ResourceData, m interfac
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusNoContent,
 		"resourceSonarqubeProjectMainBranchCreate",
 	)
@@ -89,7 +89,7 @@ func resourceSonarqubeProjectMainBranchRead(d *schema.ResourceData, m interface{
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"GET",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusOK,
 		"resourceSonarqubeProjectMainBranchRead",
 	)
@@ -128,7 +128,7 @@ func resourceSonarqubeProjectMainBranchDelete(d *schema.ResourceData, m interfac
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusNoContent,
 		"resourceSonarqubeProjectMainBranchDelete",
 	)

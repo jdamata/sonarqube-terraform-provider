@@ -68,7 +68,7 @@ func resourceSonarqubeGroupCreate(d *schema.ResourceData, m interface{}) error {
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusOK,
 		"resourceSonarqubeGroupCreate",
 	)
@@ -99,7 +99,7 @@ func resourceSonarqubeGroupRead(d *schema.ResourceData, m interface{}) error {
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"GET",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusOK,
 		"resourceSonarqubeGroupRead",
 	)
@@ -168,7 +168,7 @@ func resourceSonarqubeGroupUpdate(d *schema.ResourceData, m interface{}) error {
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusOK,
 		"resourceSonarqubeGroupUpdate",
 	)
@@ -191,7 +191,7 @@ func resourceSonarqubeGroupDelete(d *schema.ResourceData, m interface{}) error {
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusNoContent,
 		"resourceSonarqubeGroupDelete",
 	)

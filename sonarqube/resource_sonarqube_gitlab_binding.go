@@ -71,7 +71,7 @@ func resourceSonarqubeGitlabBindingCreate(d *schema.ResourceData, m interface{})
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusNoContent,
 		"resourceSonarqubeGitlabBindingCreate",
 	)
@@ -101,7 +101,7 @@ func resourceSonarqubeGitlabBindingRead(d *schema.ResourceData, m interface{}) e
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"GET",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusOK,
 		"resourceSonarqubeGitlabBindingRead",
 	)
@@ -142,7 +142,7 @@ func resourceSonarqubeGitlabBindingDelete(d *schema.ResourceData, m interface{})
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusNoContent,
 		"resourceSonarqubeGitlabBindingDelete",
 	)

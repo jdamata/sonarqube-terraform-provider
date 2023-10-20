@@ -132,7 +132,7 @@ func projectSetTags(d *schema.ResourceData, m interface{}, sonarQubeURL url.URL)
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusNoContent,
 		"resourceSonarqubePortfolioCreate",
 	)
@@ -157,7 +157,7 @@ func resourceSonarqubeProjectCreate(d *schema.ResourceData, m interface{}) error
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusOK,
 		"resourceSonarqubeProjectCreate",
 	)
@@ -199,7 +199,7 @@ func resourceSonarqubeProjectRead(d *schema.ResourceData, m interface{}) error {
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"GET",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusOK,
 		"resourceSonarqubeProjectRead",
 	)
@@ -259,7 +259,7 @@ func resourceSonarqubeProjectUpdate(d *schema.ResourceData, m interface{}) error
 		resp, err := httpRequestHelper(
 			m.(*ProviderConfiguration).httpClient,
 			"POST",
-			sonarQubeURL.String(),
+			sonarQubeURL,
 			http.StatusNoContent,
 			"resourceSonarqubeProjectUpdate",
 		)
@@ -290,7 +290,7 @@ func resourceSonarqubeProjectUpdate(d *schema.ResourceData, m interface{}) error
 		resp, err := httpRequestHelper(
 			m.(*ProviderConfiguration).httpClient,
 			"POST",
-			sonarQubeURL.String(),
+			sonarQubeURL,
 			http.StatusNoContent,
 			"resourceSonarqubeProjectUpdate",
 		)
@@ -323,7 +323,7 @@ func resourceSonarqubeProjectDelete(d *schema.ResourceData, m interface{}) error
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusNoContent,
 		"resourceSonarqubeProjectDelete",
 	)

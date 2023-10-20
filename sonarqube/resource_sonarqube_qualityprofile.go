@@ -117,7 +117,7 @@ func resourceSonarqubeQualityProfileCreate(d *schema.ResourceData, m interface{}
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusOK,
 		"resourceSonarqubeQualityProfileCreate",
 	)
@@ -155,7 +155,7 @@ func resourceSonarqubeQualityProfileRead(d *schema.ResourceData, m interface{}) 
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"GET",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusOK,
 		"resourceSonarqubeQualityProfileRead",
 	)
@@ -203,7 +203,7 @@ func resourceSonarqubeQualityProfileDelete(d *schema.ResourceData, m interface{}
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusNoContent,
 		"resourceSonarqubeQualityProfileDelete",
 	)
@@ -242,7 +242,7 @@ func setDefaultQualityProfile(d *schema.ResourceData, m interface{}, setDefault 
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusNoContent,
 		"setDefaultQualityProfile",
 	)
@@ -265,7 +265,7 @@ func setParentQualityProfile(d *schema.ResourceData, m interface{}) error {
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusNoContent,
 		"setParentQualityProfile",
 	)

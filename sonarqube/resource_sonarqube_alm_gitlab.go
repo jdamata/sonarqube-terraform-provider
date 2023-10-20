@@ -64,7 +64,7 @@ func resourceSonarqubeAlmGitlabCreate(d *schema.ResourceData, m interface{}) err
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusNoContent,
 		"resourceSonarqubeAlmGitlabCreate",
 	)
@@ -85,7 +85,7 @@ func resourceSonarqubeAlmGitlabRead(d *schema.ResourceData, m interface{}) error
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"GET",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusOK,
 		"resourceSonarqubeAlmGitlabRead",
 	)
@@ -126,7 +126,7 @@ func resourceSonarqubeAlmGitlabUpdate(d *schema.ResourceData, m interface{}) err
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusOK,
 		"resourceSonarqubeAlmGitlabUpdate",
 	)
@@ -148,7 +148,7 @@ func resourceSonarqubeAlmGitlabDelete(d *schema.ResourceData, m interface{}) err
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusNoContent,
 		"resourceSonarqubeAlmGitlabDelete",
 	)

@@ -69,7 +69,7 @@ func resourceSonarqubeAlmAzureCreate(d *schema.ResourceData, m interface{}) erro
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusNoContent,
 		"resourceSonarqubeAlmAzureCreate",
 	)
@@ -90,7 +90,7 @@ func resourceSonarqubeAlmAzureRead(d *schema.ResourceData, m interface{}) error 
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"GET",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusOK,
 		"resourceSonarqubeAlmAzureRead",
 	)
@@ -129,7 +129,7 @@ func resourceSonarqubeAlmAzureUpdate(d *schema.ResourceData, m interface{}) erro
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusOK,
 		"resourceSonarqubeAlmAzureUpdate",
 	)
@@ -151,7 +151,7 @@ func resourceSonarqubeAlmAzureDelete(d *schema.ResourceData, m interface{}) erro
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusNoContent,
 		"resourceSonarqubeAlmAzureDelete",
 	)

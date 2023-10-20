@@ -168,7 +168,7 @@ func resourceSonarqubeRuleCreate(d *schema.ResourceData, m interface{}) error {
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusOK,
 		"resourceSonarqubeRuleCreate",
 	)
@@ -196,7 +196,7 @@ func resourceSonarqubeRuleRead(d *schema.ResourceData, m interface{}) error {
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"GET",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusOK,
 		"resourceSonarqubeRuleRead",
 	)
@@ -236,7 +236,7 @@ func resourceSonarqubeRuleDelete(d *schema.ResourceData, m interface{}) error {
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusOK,
 		"resourceSonarqubeRuleDelete",
 	)
@@ -270,7 +270,7 @@ func resourceSonarqubeRuleUpdate(d *schema.ResourceData, m interface{}) error {
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusOK,
 		"resourceSonarqubeRuleUpdate",
 	)

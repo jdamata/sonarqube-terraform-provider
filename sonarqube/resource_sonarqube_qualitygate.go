@@ -126,7 +126,7 @@ func resourceSonarqubeQualityGateCreate(d *schema.ResourceData, m interface{}) e
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusOK,
 		"resourceQualityGateCreate",
 	)
@@ -272,7 +272,7 @@ func resourceSonarqubeQualityGateDelete(d *schema.ResourceData, m interface{}) e
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusNoContent,
 		"resourceQualityGateDelete",
 	)
@@ -308,7 +308,7 @@ func setDefaultQualityGate(d *schema.ResourceData, m interface{}, setDefault boo
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusNoContent,
 		"setDefaultQualityGate",
 	)
@@ -330,7 +330,7 @@ func readQualityGateFromApi(d *schema.ResourceData, m interface{}) (*GetQualityG
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"GET",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusOK,
 		"readQualityGateFromApi",
 	)
@@ -462,7 +462,7 @@ func createCondition(qualityGateName string, metric string, op string, threshold
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusOK,
 		"createCondition",
 	)
@@ -496,7 +496,7 @@ func updateCondition(id, metric, op, threshold string, m interface{}) error {
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusOK,
 		"updateCondition",
 	)
@@ -518,7 +518,7 @@ func deleteCondition(id string, m interface{}) error {
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusNoContent,
 		"deleteCondition",
 	)
@@ -543,7 +543,7 @@ func updateQualityGateName(d *schema.ResourceData, m interface{}) error {
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusOK,
 		"updateQualityGateName",
 	)

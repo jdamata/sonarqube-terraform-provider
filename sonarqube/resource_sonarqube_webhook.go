@@ -83,7 +83,7 @@ func resourceSonarqubeWebhookCreate(d *schema.ResourceData, m interface{}) error
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusOK,
 		"resourceWebhookCreate",
 	)
@@ -119,7 +119,7 @@ func resourceSonarqubeWebhookRead(d *schema.ResourceData, m interface{}) error {
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"GET",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusOK,
 		"resourceWebhookRead",
 	)
@@ -176,7 +176,7 @@ func resourceSonarqubeWebhookUpdate(d *schema.ResourceData, m interface{}) error
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusNoContent,
 		"resourceWebhookUpdate",
 	)
@@ -199,7 +199,7 @@ func resourceSonarqubeWebhookDelete(d *schema.ResourceData, m interface{}) error
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusNoContent,
 		"resourceWebhookDelete",
 	)

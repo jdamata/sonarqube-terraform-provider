@@ -62,7 +62,7 @@ func resourceSonarqubeQualityGateProjectAssociationCreate(d *schema.ResourceData
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusNoContent,
 		"resourceSonarqubeQualityGateProjectAssociationCreate",
 	)
@@ -89,7 +89,7 @@ func resourceSonarqubeQualityGateProjectAssociationRead(d *schema.ResourceData, 
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"GET",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusOK,
 		"resourceSonarqubeQualityGateProjectAssociationRead",
 	)
@@ -122,7 +122,7 @@ func resourceSonarqubeQualityGateProjectAssociationDelete(d *schema.ResourceData
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusNoContent,
 		"resourceSonarqubeQualityGateProjectAssociationDelete",
 	)

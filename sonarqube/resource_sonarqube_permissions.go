@@ -132,7 +132,7 @@ func resourceSonarqubePermissionsCreate(d *schema.ResourceData, m interface{}) e
 		resp, err := httpRequestHelper(
 			m.(*ProviderConfiguration).httpClient,
 			"POST",
-			sonarQubeURL.String(),
+			sonarQubeURL,
 			http.StatusNoContent,
 			"resourceSonarqubePermissionsCreate",
 		)
@@ -184,7 +184,7 @@ func resourceSonarqubePermissionsRead(d *schema.ResourceData, m interface{}) err
 		resp, err := httpRequestHelper(
 			m.(*ProviderConfiguration).httpClient,
 			"GET",
-			sonarQubeURL.String(),
+			sonarQubeURL,
 			http.StatusOK,
 			"resourceSonarqubePermissionsRead",
 		)
@@ -228,7 +228,7 @@ func resourceSonarqubePermissionsRead(d *schema.ResourceData, m interface{}) err
 		resp, err := httpRequestHelper(
 			m.(*ProviderConfiguration).httpClient,
 			"GET",
-			sonarQubeURL.String(),
+			sonarQubeURL,
 			http.StatusOK,
 			"resourceSonarqubePermissionsRead",
 		)
@@ -316,7 +316,7 @@ func resourceSonarqubePermissionsDelete(d *schema.ResourceData, m interface{}) e
 		resp, err := httpRequestHelper(
 			m.(*ProviderConfiguration).httpClient,
 			"POST",
-			sonarQubeURL.String(),
+			sonarQubeURL,
 			http.StatusNoContent,
 			"resourceSonarqubePermissionsDelete",
 		)

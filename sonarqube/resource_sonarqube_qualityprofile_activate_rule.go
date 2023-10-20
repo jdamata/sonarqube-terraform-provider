@@ -98,7 +98,7 @@ func resourceSonarqubeQualityProfileRuleCreate(d *schema.ResourceData, m interfa
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusNoContent,
 		"resourceSonarqubeQualityProfileRuleCreate",
 	)
@@ -122,7 +122,7 @@ func resourceSonarqubeQualityProfileRuleDelete(d *schema.ResourceData, m interfa
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusNoContent,
 		"resourceSonarqubeQualityProfileRuleDelete",
 	)
@@ -144,7 +144,7 @@ func resourceSonarqubeQualityProfileRuleRead(d *schema.ResourceData, m interface
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"GET",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusOK,
 		"resourceSonarqubeQualityProfileRuleRead",
 	)

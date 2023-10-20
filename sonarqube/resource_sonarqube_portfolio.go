@@ -270,7 +270,7 @@ func portfolioSetSelectionMode(d *schema.ResourceData, m interface{}, sonarQubeU
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusNoContent,
 		"resourceSonarqubePortfolioCreate",
 	)
@@ -313,7 +313,7 @@ func resourceSonarqubePortfolioCreate(d *schema.ResourceData, m interface{}) err
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusOK,
 		"resourceSonarqubePortfolioCreate",
 	)
@@ -369,7 +369,7 @@ func resourceSonarqubePortfolioUpdate(d *schema.ResourceData, m interface{}) err
 		resp, err := httpRequestHelper(
 			m.(*ProviderConfiguration).httpClient,
 			"POST",
-			sonarQubeURL.String(),
+			sonarQubeURL,
 			http.StatusOK,
 			"resourceSonarqubePortfolioUpdate",
 		)
@@ -402,8 +402,9 @@ func resourceSonarqubePortfolioDelete(d *schema.ResourceData, m interface{}) err
 
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
+
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusNoContent,
 		"resourceSonarqubePortfolioDelete",
 	)
@@ -460,7 +461,7 @@ func readPortfolioFromApi(d *schema.ResourceData, m interface{}) (*Portfolio, er
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"GET",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusOK,
 		"readPortfolioFromApi",
 	)
@@ -555,7 +556,7 @@ func addSelectedProject(portfolioKey, projectKey string, selectedBranches []stri
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusNoContent, // For some reason this endpoint returns 204 on success...
 		"addSelectedProject",
 	)
@@ -567,6 +568,7 @@ func addSelectedProject(portfolioKey, projectKey string, selectedBranches []stri
 	for _, branch := range selectedBranches {
 		addSelectedProjectBranch(portfolioKey, projectKey, branch, m)
 	}
+
 
 	return nil
 }
@@ -602,7 +604,7 @@ func addSelectedProjectBranch(portfolioKey, projectKey, branch string, m interfa
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusNoContent, // For some reason this endpoint returns 204 on success...
 		"addSelectedProject",
 	)
@@ -627,7 +629,7 @@ func deleteSelectedProjectBranch(portfolioKey, projectKey, branch string, m inte
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusNoContent, // For some reason this endpoint returns 204 on success...
 		"addSelectedProject",
 	)
@@ -669,7 +671,7 @@ func deleteSelectedProject(portfolioKey, projectKey string, m interface{}) error
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusNoContent,
 		"deleteCondition",
 	)

@@ -76,7 +76,7 @@ func resourceSonarqubePermissionTemplateCreate(d *schema.ResourceData, m interfa
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusOK,
 		"resourceSonarqubePermissionTemplateCreate",
 	)
@@ -119,7 +119,7 @@ func resourceSonarqubePermissionTemplateRead(d *schema.ResourceData, m interface
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"GET",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusOK,
 		"resourceSonarqubePermissionTemplateRead",
 	)
@@ -178,7 +178,7 @@ func resourceSonarqubePermissionTemplateUpdate(d *schema.ResourceData, m interfa
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusOK,
 		"resourceSonarqubePermissionTemplateUpdate",
 	)
@@ -208,7 +208,7 @@ func resourceSonarqubePermissionTemplateDelete(d *schema.ResourceData, m interfa
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusNoContent,
 		"resourceSonarqubePermissionTemplateDelete",
 	)
@@ -236,7 +236,7 @@ func resourceSonarqubePermissionTemplateSetDefault(sonarQubeURL url.URL, templat
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusNoContent,
 		"resourceSonarqubePermissionTemplateCreate",
 	)

@@ -61,7 +61,7 @@ func resourceSonarqubeUserExternalIdentityCreate(d *schema.ResourceData, m inter
 	_, err = httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusNoContent,
 		"resourceSonarqubeUserExternalIdentityCreate",
 	)
@@ -97,7 +97,7 @@ func isLocal(login string, m interface{}) (bool, error) {
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"GET",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusOK,
 		"resourceSonarqubeUserExternalIdentity",
 	)

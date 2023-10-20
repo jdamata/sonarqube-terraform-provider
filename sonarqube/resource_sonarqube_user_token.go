@@ -123,7 +123,7 @@ func resourceSonarqubeUserTokenCreate(d *schema.ResourceData, m interface{}) err
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusOK,
 		"resourceSonarqubeUserTokenCreate",
 	)
@@ -170,7 +170,7 @@ func resourceSonarqubeUserTokenRead(d *schema.ResourceData, m interface{}) error
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"GET",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusOK,
 		"resourceSonarqubeUserTokenRead",
 	)
@@ -224,7 +224,7 @@ func resourceSonarqubeUserTokenDelete(d *schema.ResourceData, m interface{}) err
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusNoContent,
 		"resourceSonarqubeUserTokenDelete",
 	)

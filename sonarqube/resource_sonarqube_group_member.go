@@ -68,7 +68,7 @@ func resourceSonarqubeGroupMemberCreate(d *schema.ResourceData, m interface{}) e
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusNoContent,
 		"resourceSonarqubeGroupMemberCreate",
 	)
@@ -93,7 +93,7 @@ func resourceSonarqubeGroupMemberRead(d *schema.ResourceData, m interface{}) err
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"GET",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusOK,
 		"resourceSonarqubeGroupMemberRead",
 	)
@@ -141,7 +141,7 @@ func resourceSonarqubeGroupMemberDelete(d *schema.ResourceData, m interface{}) e
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusNoContent,
 		"resourceSonarqubeGroupMemberDelete",
 	)
@@ -181,7 +181,7 @@ func checkGroupMemberExists(groupName string, loginName string, m interface{}) (
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"GET",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusOK,
 		"checkGroupMemberExists",
 	)

@@ -93,7 +93,7 @@ func resourceSonarqubeAzureBindingCreate(d *schema.ResourceData, m interface{}) 
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusNoContent,
 		"resourceSonarqubeAzureBindingCreate",
 	)
@@ -129,7 +129,7 @@ func resourceSonarqubeAzureBindingRead(d *schema.ResourceData, m interface{}) er
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"GET",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusOK,
 		"resourceSonarqubeAzureBindingRead",
 	)
@@ -173,7 +173,7 @@ func resourceSonarqubeAzureBindingDelete(d *schema.ResourceData, m interface{}) 
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusNoContent,
 		"resourceSonarqubeAzureBindingDelete",
 	)

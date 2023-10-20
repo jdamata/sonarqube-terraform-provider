@@ -90,7 +90,7 @@ func resourceSonarqubeSettingsCreate(d *schema.ResourceData, m interface{}) erro
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusNoContent,
 		"resourceSonarqubeSettingsCreate",
 	)
@@ -113,7 +113,7 @@ func resourceSonarqubeSettingsRead(d *schema.ResourceData, m interface{}) error 
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"GET",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusOK,
 		"resourceSonarqubeSettingsRead",
 	)
@@ -151,7 +151,7 @@ func resourceSonarqubeSettingsDelete(d *schema.ResourceData, m interface{}) erro
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusNoContent,
 		"resourceSonarqubeSettingsDelete",
 	)
@@ -180,7 +180,7 @@ func resourceSonarqubeSettingsUpdate(d *schema.ResourceData, m interface{}) erro
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusNoContent,
 		"resourceSonarqubeSettingsUpdate",
 	)
@@ -231,7 +231,7 @@ func getComponentSettings(component string, m interface{}) ([]Setting, error) {
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"GET",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusOK,
 		"getProjectSettings",
 	)
@@ -371,7 +371,7 @@ func setComponentSetting(component string, setting map[string]interface{}, m int
 	_, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusOK,
 		"setComponentSettings",
 	)
@@ -414,7 +414,7 @@ func removeComponentSettings(component string, newSettings []interface{}, apiPro
 		_, err := httpRequestHelper(
 			m.(*ProviderConfiguration).httpClient,
 			"POST",
-			sonarQubeURL.String(),
+			sonarQubeURL,
 			http.StatusNoContent,
 			"deleteSetting",
 		)

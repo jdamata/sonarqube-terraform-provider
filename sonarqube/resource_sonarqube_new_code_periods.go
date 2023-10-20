@@ -116,7 +116,7 @@ func resourceSonarqubeNewCodePeriodsCreate(d *schema.ResourceData, m interface{}
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusOK,
 		"resourceSonarqubeNewCodePeriodsCreate",
 	)
@@ -148,7 +148,7 @@ func resourceSonarqubeNewCodePeriodsRead(d *schema.ResourceData, m interface{}) 
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"GET",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusOK,
 		"resourceSonarqubeNewCodePeriodsRead",
 	)
@@ -197,7 +197,7 @@ func resourceSonarqubeNewCodePeriodsDelete(d *schema.ResourceData, m interface{}
 	resp, err := httpRequestHelper(
 		m.(*ProviderConfiguration).httpClient,
 		"POST",
-		sonarQubeURL.String(),
+		sonarQubeURL,
 		http.StatusOK,
 		"resourceSonarqubeNewCodePeriodsDelete",
 	)

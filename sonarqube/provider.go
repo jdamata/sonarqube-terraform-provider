@@ -207,7 +207,7 @@ func sonarqubeSystemInfo(client *retryablehttp.Client, sonarqube url.URL) (strin
 	resp, err := httpRequestHelper(
 		client,
 		"GET",
-		sonarqube.String(),
+		sonarqube,
 		http.StatusOK,
 		"sonarqubeHealth",
 	)
