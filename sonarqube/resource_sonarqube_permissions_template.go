@@ -66,6 +66,11 @@ templates.`,
 				Optional:    true,
 				Description: "Set the template as the default. This can only be set for one template.",
 			},
+			"bulk_apply": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Description: "Bulk apply the template to all projects that match the project key pattern.",
+			},
 		},
 	}
 }
@@ -108,6 +113,15 @@ func resourceSonarqubePermissionTemplateCreate(d *schema.ResourceData, m interfa
 	if d.Get("default").(bool) {
 		sonarQubeURL = m.(*ProviderConfiguration).sonarQubeURL
 		err = resourceSonarqubePermissionTemplateSetDefault(sonarQubeURL, d.Id(), m)
+		if err != nil {
+			return err
+		}
+	}
+
+	// If bulk_apply is set to true, apply this permission template to all projects that match the project key pattern.
+	if d.Get("bulk_apply").(bool) {
+		sonarQubeURL = m.(*ProviderConfiguration).sonarQubeURL
+		err = resourceSonarqubePermissionTemplateBulkApply(sonarQubeURL, d.Id(), d.Get("project_key_pattern").(string), m)
 		if err != nil {
 			return err
 		}
@@ -202,6 +216,15 @@ func resourceSonarqubePermissionTemplateUpdate(d *schema.ResourceData, m interfa
 		}
 	}
 
+	// If bulk_apply is set to true, apply this permission template to all projects that match the project key pattern.
+	if d.Get("bulk_apply").(bool) {
+		sonarQubeURL = m.(*ProviderConfiguration).sonarQubeURL
+		err = resourceSonarqubePermissionTemplateBulkApply(sonarQubeURL, d.Id(), d.Get("project_key_pattern").(string), m)
+		if err != nil {
+			return err
+		}
+	}
+
 	return resourceSonarqubePermissionTemplateRead(d, m)
 }
 
@@ -249,6 +272,30 @@ func resourceSonarqubePermissionTemplateSetDefault(sonarQubeURL url.URL, templat
 	)
 	if err != nil {
 		return fmt.Errorf("error setting Sonarqube permission template to default: %+v", err)
+	}
+	defer resp.Body.Close()
+	return nil
+}
+
+func resourceSonarqubePermissionTemplateBulkApply(sonarQubeURL url.URL, templateID string, projectKeyPattern string, m interface{}) error {
+	sonarQubeURL.Path = strings.TrimSuffix(sonarQubeURL.Path, "/") + "/api/permissions/bulk_apply_template"
+	// Trim the trailing ".*" from the projectKeyPattern
+	projectKeyPattern = strings.TrimSuffix(projectKeyPattern, ".*")
+
+	sonarQubeURL.RawQuery = url.Values{
+		"templateId": []string{templateID},
+		"q":          []string{projectKeyPattern},
+	}.Encode()
+
+	resp, err := httpRequestHelper(
+		m.(*ProviderConfiguration).httpClient,
+		"POST",
+		sonarQubeURL.String(),
+		http.StatusNoContent,
+		"resourceSonarqubePermissionTemplateBulkApply",
+	)
+	if err != nil {
+		return fmt.Errorf("error bulk applying Sonarqube permission template: %+v", err)
 	}
 	defer resp.Body.Close()
 	return nil
