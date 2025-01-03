@@ -309,32 +309,22 @@ func synchronizeSettings(d *schema.ResourceData, m interface{}) (bool, error) {
 }
 
 func checkSettingDiff(a map[string]interface{}, b Setting) bool {
-	if a["field_values"] != nil {
+	if a["field_values"] != nil && len(a["field_values"].([]interface{})) > 0 {
 		// array of objects of key/value pairs
 		fieldValues := a["field_values"].([]interface{})
-		if len(fieldValues) != len(b.FieldValues) {
-			return false
+		k1, _ := json.Marshal(fieldValues)
+		k2, _ := json.Marshal(b.FieldValues)
+		if len(fieldValues) != len(b.FieldValues) || string(k1) != string(k2) {
+			return true
 		}
-		for i := range fieldValues {
-			k1, _ := json.Marshal(fieldValues[i])
-			k2, _ := json.Marshal(b.FieldValues[i])
-			if string(k1) != string(k2) {
-				return false
-			}
-		}
-		return true
-	} else if a["values"] != nil && len(a["values"].([]string)) > 0 {
+	} else if a["values"] != nil && len(a["values"].([]interface{})) > 0 {
 		// array of strings
-		values := a["values"].([]string)
-		if len(values) != len(b.Values) {
-			return false
+		values := a["values"].([]interface{})
+		k1, _ := json.Marshal(values)
+		k2, _ := json.Marshal(b.Values)
+		if len(values) != len(b.Values) || string(k1) != string(k2) {
+			return true
 		}
-		for i := range values {
-			if string(values[i]) != string(b.Values[i]) {
-				return false
-			}
-		}
-		return true
 	} else if a["value"] != nil && a["value"] != "" {
 		return a["value"].(string) != b.Value
 	}
@@ -367,8 +357,7 @@ func getComponentSettingUrlEncode(setting map[string]interface{}) url.Values {
 		fieldValues := setting["field_values"].([]interface{})
 		for _, value := range fieldValues {
 			b, _ := json.Marshal(value)
-			fv := string(b)
-			raw.Add("fieldValues", fv)
+			raw.Add("fieldValues", string(b))
 			addedSetting = true
 		}
 	}
