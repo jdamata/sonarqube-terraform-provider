@@ -233,35 +233,45 @@ func resourceSonarqubePermissionsRead(d *schema.ResourceData, m interface{}) err
 			// direct group permission
 			sonarQubeURL.Path = strings.TrimSuffix(sonarQubeURL.Path, "/") + "/api/permissions/groups"
 		}
-		sonarQubeURL.RawQuery = RawQuery.Encode()
 
-		resp, err := httpRequestHelper(
-			m.(*ProviderConfiguration).httpClient,
-			"GET",
-			sonarQubeURL.String(),
-			http.StatusOK,
-			"resourceSonarqubePermissionsRead",
-		)
-		if err != nil {
-			return fmt.Errorf("error reading Sonarqube permissions: %+v", err)
-		}
-		defer resp.Body.Close()
+		pageIndex := 1
+		for {
+			RawQuery.Set("p", fmt.Sprintf("%d", pageIndex))
+			sonarQubeURL.RawQuery = RawQuery.Encode()
 
-		// Decode response into struct
-		groups := GetGroupPermissions{}
-		err = json.NewDecoder(resp.Body).Decode(&groups)
-		if err != nil {
-			return fmt.Errorf("resourceSonarqubePermissionsRead: Failed to decode json into struct: %+v", err)
-		}
-
-		// Loop over all groups to see if the group we need exists.
-		groupName := d.Get("group_name").(string)
-		for _, value := range groups.Groups {
-			if strings.EqualFold(value.Name, groupName) {
-				d.Set("group_name", value.Name)
-				d.Set("permissions", flattenPermissions(&value.Permissions))
-				return nil
+			resp, err := httpRequestHelper(
+				m.(*ProviderConfiguration).httpClient,
+				"GET",
+				sonarQubeURL.String(),
+				http.StatusOK,
+				"resourceSonarqubePermissionsRead",
+			)
+			if err != nil {
+				return fmt.Errorf("error reading Sonarqube permissions: %+v", err)
 			}
+			defer resp.Body.Close()
+
+			// Decode response into struct
+			groups := GetGroupPermissions{}
+			err = json.NewDecoder(resp.Body).Decode(&groups)
+			if err != nil {
+				return fmt.Errorf("resourceSonarqubePermissionsRead: Failed to decode json into struct: %+v", err)
+			}
+
+			// Loop over all groups to see if the group we need exists.
+			groupName := d.Get("group_name").(string)
+			for _, value := range groups.Groups {
+				if strings.EqualFold(value.Name, groupName) {
+					d.Set("group_name", value.Name)
+					d.Set("permissions", flattenPermissions(&value.Permissions))
+					return nil
+				}
+			}
+
+			if len(groups.Groups) < 100 {
+				break // no more pages to check
+			}
+			pageIndex++
 		}
 	}
 
