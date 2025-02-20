@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 	"github.com/satori/uuid"
 )
 
@@ -39,36 +40,49 @@ func resourceSonarqubePermissions() *schema.Resource {
 				Type:         schema.TypeString,
 				Optional:     true,
 				ForceNew:     true,
-				ExactlyOneOf: []string{"login_name", "group_name"},
-				Description:  "The name of the user that should get the specified permissions. Changing this forces a new resource to be created. Cannot be used with `group_name`.",
+				ExactlyOneOf: []string{"login_name", "group_name", "special_group_name"},
+				Description:  "The name of the user that should get the specified permissions. Changing this forces a new resource to be created. Cannot be used with `group_name` and `special_group_name`.",
 			},
 			"group_name": {
 				Type:         schema.TypeString,
 				Optional:     true,
 				ForceNew:     true,
-				ExactlyOneOf: []string{"login_name", "group_name"},
-				Description:  "The name of the Group that should get the specified permissions. Changing this forces a new resource to be created. Cannot be used with `login_name`",
+				ExactlyOneOf: []string{"login_name", "group_name", "special_group_name"},
+				Description:  "The name of the Group that should get the specified permissions. Changing this forces a new resource to be created. Cannot be used with `login_name` and `special_group_name`",
+			},
+			"special_group_name": {
+				Type:         schema.TypeString,
+				Optional:     true,
+				ForceNew:     true,
+				ExactlyOneOf: []string{"login_name", "group_name", "special_group_name"},
+				ValidateDiagFunc: validation.ToDiagFunc(
+					validation.StringInSlice(
+						[]string{"project_creator"},
+						false,
+					),
+				),
+				Description: "The name of the Special Group that should get the specified permissions. Changing this forces a new resource to be created. Cannot be used with `login_name` and `group_name`.",
 			},
 			"project_key": {
 				Type:          schema.TypeString,
 				ForceNew:      true,
 				Optional:      true,
-				ConflictsWith: []string{"template_id", "template_name"},
-				Description:   "Specify if you want to apply project level permissions. Changing this forces a new resource to be created. Cannot be used with `template_id & template_name`",
+				ConflictsWith: []string{"special_group_name", "template_id", "template_name"},
+				Description:   "Specify if you want to apply project level permissions. Changing this forces a new resource to be created. Cannot be used with `special_group_name`, `template_id` and `template_name`",
 			},
 			"template_id": {
 				Type:          schema.TypeString,
 				ForceNew:      true,
 				Optional:      true,
 				ConflictsWith: []string{"project_key", "template_name"},
-				Description:   "Specify if you want to apply the permissions to a permission template. Changing this forces a new resource to be created. Cannot be used with `project_key & template_name`",
+				Description:   "Specify if you want to apply the permissions to a permission template. Changing this forces a new resource to be created. Cannot be used with `project_key` and `template_name`",
 			},
 			"template_name": {
 				Type:          schema.TypeString,
 				ForceNew:      true,
 				Optional:      true,
 				ConflictsWith: []string{"project_key", "template_id"},
-				Description:   "Specify if you want to apply the permissions to a permission template. Changing this forces a new resource to be created. Cannot be used with `project_key & template_id`",
+				Description:   "Specify if you want to apply the permissions to a permission template. Changing this forces a new resource to be created. Cannot be used with `project_key` and `template_id`",
 			},
 			"permissions": {
 				Type:     schema.TypeList,
@@ -98,8 +112,8 @@ func resourceSonarqubePermissionsCreate(d *schema.ResourceData, m interface{}) e
 	}
 
 	// we use different API endpoints and request params
-	// based on the target principal type (group or user)
-	// and if its a direct or template permission
+	// based on the target principal type (group or user or
+	// special group) and if its a direct or template permission
 	if _, ok := d.GetOk("login_name"); ok {
 		// user permission
 		RawQuery.Add("login", d.Get("login_name").(string))
@@ -115,20 +129,32 @@ func resourceSonarqubePermissionsCreate(d *schema.ResourceData, m interface{}) e
 			// direct user permission
 			sonarQubeURL.Path = strings.TrimSuffix(sonarQubeURL.Path, "/") + "/api/permissions/add_user"
 		}
-	} else {
+	} else if _, ok := d.GetOk("group_name"); ok {
 		// group permission
 		RawQuery.Add("groupName", d.Get("group_name").(string))
 		if templateID, ok := d.GetOk("template_id"); ok {
-			// template user permission
+			// template group permission
 			sonarQubeURL.Path = strings.TrimSuffix(sonarQubeURL.Path, "/") + "/api/permissions/add_group_to_template"
 			RawQuery.Add("templateId", templateID.(string))
-			// name provide instead of id
 		} else if templateName, ok := d.GetOk("template_name"); ok {
+			// name provide instead of id
 			sonarQubeURL.Path = strings.TrimSuffix(sonarQubeURL.Path, "/") + "/api/permissions/add_group_to_template"
 			RawQuery.Add("templateName", templateName.(string))
 		} else {
 			// direct user permission
 			sonarQubeURL.Path = strings.TrimSuffix(sonarQubeURL.Path, "/") + "/api/permissions/add_group"
+		}
+	} else {
+		// special group permission set to project creator
+		sonarQubeURL.Path = strings.TrimSuffix(sonarQubeURL.Path, "/") + "/api/permissions/add_project_creator_to_template"
+		if templateID, ok := d.GetOk("template_id"); ok {
+			// template project creator permission
+			RawQuery.Add("templateId", templateID.(string))
+		} else if templateName, ok := d.GetOk("template_name"); ok {
+			// name provide instead of id
+			RawQuery.Add("templateName", templateName.(string))
+		} else {
+			return fmt.Errorf("resourceSonarqubePermissionsCreate: 'templateId' or 'templateName' must be set when 'special_group_name' is set to 'project_creator'")
 		}
 	}
 
@@ -173,8 +199,8 @@ func resourceSonarqubePermissionsRead(d *schema.ResourceData, m interface{}) err
 	}
 
 	// we use different API endpoints and request params
-	// based on the target principal type (group or user)
-	// and if its a direct or template permission
+	// based on the target principal type (group or user or
+	// special group) and if its a direct or template permission
 	if _, ok := d.GetOk("login_name"); ok {
 		// permission target is USER
 		if templateID, ok := d.GetOk("template_id"); ok {
@@ -219,8 +245,7 @@ func resourceSonarqubePermissionsRead(d *schema.ResourceData, m interface{}) err
 				return nil
 			}
 		}
-
-	} else {
+	} else if _, ok := d.GetOk("group_name"); ok {
 		// permission target is GROUP
 		if templateID, ok := d.GetOk("template_id"); ok {
 			// template group permission
@@ -263,6 +288,43 @@ func resourceSonarqubePermissionsRead(d *schema.ResourceData, m interface{}) err
 				return nil
 			}
 		}
+	} else {
+		// permission target is PROJECT CREATOR set to project creator
+		if templateName, ok := d.GetOk("template_name"); ok {
+			RawQuery.Add("templateName", templateName.(string))
+		}
+		sonarQubeURL.Path = strings.TrimSuffix(sonarQubeURL.Path, "/") + "/api/permissions/search_templates"
+		sonarQubeURL.RawQuery = RawQuery.Encode()
+
+		resp, err := httpRequestHelper(
+			m.(*ProviderConfiguration).httpClient,
+			"GET",
+			sonarQubeURL.String(),
+			http.StatusOK,
+			"resourceSonarqubePermissionsRead",
+		)
+		if err != nil {
+			return fmt.Errorf("error reading Sonarqube permissions: %+v", err)
+		}
+		defer resp.Body.Close()
+
+		// Decode response into struct
+		permissionTemplates := GetPermissionTemplates{}
+		err = json.NewDecoder(resp.Body).Decode(&permissionTemplates)
+		if err != nil {
+			return fmt.Errorf("resourceSonarqubePermissionsRead: Failed to decode json into struct: %+v", err)
+		}
+
+		// Loop over all permission templates
+		templateId := d.Get("template_id").(string)
+		templateName := d.Get("template_name").(string)
+		for _, value := range permissionTemplates.PermissionTemplates {
+			if strings.EqualFold(value.ID, templateId) || strings.EqualFold(value.Name, templateName) {
+				d.Set("special_group_name", "project_creator")
+				d.Set("permissions", flattenProjectCreatorPermissions(&value.Permissions))
+				return nil
+			}
+		}
 	}
 
 	return fmt.Errorf("resourceSonarqubePermissionsRead: Unable to find group permissions for group: %+v", d.Id())
@@ -282,7 +344,8 @@ func resourceSonarqubePermissionsDelete(d *schema.ResourceData, m interface{}) e
 	}
 
 	// we use different API endpoints and request params
-	// based on the target principal type (group or user)
+	// based on the target principal type (group or user
+	// or special group)
 	if _, ok := d.GetOk("login_name"); ok {
 		// permission target is USER
 		if templateID, ok := d.GetOk("template_id"); ok {
@@ -290,6 +353,7 @@ func resourceSonarqubePermissionsDelete(d *schema.ResourceData, m interface{}) e
 			sonarQubeURL.Path = strings.TrimSuffix(sonarQubeURL.Path, "/") + "/api/permissions/remove_user_from_template"
 			RawQuery.Add("templateId", templateID.(string))
 		} else if templateName, ok := d.GetOk("template_name"); ok {
+			// name provide instead of id
 			sonarQubeURL.Path = strings.TrimSuffix(sonarQubeURL.Path, "/") + "/api/permissions/remove_user_from_template"
 			RawQuery.Add("templateName", templateName.(string))
 		} else {
@@ -298,14 +362,14 @@ func resourceSonarqubePermissionsDelete(d *schema.ResourceData, m interface{}) e
 		}
 		RawQuery.Add("login", d.Get("login_name").(string))
 		sonarQubeURL.RawQuery = RawQuery.Encode()
-
-	} else {
+	} else if _, ok := d.GetOk("group_name"); ok {
 		// permission target is GROUP
 		if templateID, ok := d.GetOk("template_id"); ok {
 			// template group permission
 			sonarQubeURL.Path = strings.TrimSuffix(sonarQubeURL.Path, "/") + "/api/permissions/remove_group_from_template"
 			RawQuery.Add("templateId", templateID.(string))
 		} else if templateName, ok := d.GetOk("template_name"); ok {
+			// name provide instead of id
 			sonarQubeURL.Path = strings.TrimSuffix(sonarQubeURL.Path, "/") + "/api/permissions/remove_group_from_template"
 			RawQuery.Add("templateName", templateName.(string))
 		} else {
@@ -314,6 +378,18 @@ func resourceSonarqubePermissionsDelete(d *schema.ResourceData, m interface{}) e
 		}
 		RawQuery.Add("groupName", d.Get("group_name").(string))
 		sonarQubeURL.RawQuery = RawQuery.Encode()
+	} else {
+		// permission target is SPECIAL GROUP set to project creator
+		sonarQubeURL.Path = strings.TrimSuffix(sonarQubeURL.Path, "/") + "/api/permissions/remove_project_creator_from_template"
+		if templateID, ok := d.GetOk("template_id"); ok {
+			// template project creator permission
+			RawQuery.Add("templateId", templateID.(string))
+		} else if templateName, ok := d.GetOk("template_name"); ok {
+			// name provide instead of id
+			RawQuery.Add("templateName", templateName.(string))
+		} else {
+			return fmt.Errorf("resourceSonarqubePermissionsDelete: 'templateId' or 'templateName' must be set when 'special_group_name' is set to 'project_creator'")
+		}
 	}
 
 	// loop through all permissions that should be applied
@@ -357,6 +433,21 @@ func flattenPermissions(input *[]string) []interface{} {
 
 	for _, permission := range *input {
 		flatPermissions = append(flatPermissions, permission)
+	}
+
+	return flatPermissions
+}
+
+func flattenProjectCreatorPermissions(input *[]PermissionTemplatePermission) []interface{} {
+	flatPermissions := make([]interface{}, 0)
+	if input == nil {
+		return flatPermissions
+	}
+
+	for _, permission := range *input {
+		if permission.WithProjectCreator {
+			flatPermissions = append(flatPermissions, permission.Key)
+		}
 	}
 
 	return flatPermissions
