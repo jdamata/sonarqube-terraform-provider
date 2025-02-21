@@ -25,13 +25,13 @@ type GetLanguages struct {
 
 func dataSourceSonarqubeLanguages() *schema.Resource {
 	return &schema.Resource{
-		Description: "Use this data source to get Sonarqube languages resources",
+		Description: "Use this data source to get Sonarqube language resources.",
 		Read:        dataSourceSonarqubeLanguagesRead,
 		Schema: map[string]*schema.Schema{
 			"search": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: "Search languages by key or name",
+				Description: "Search languages by key or name.",
 			},
 			"languages": {
 				Type:     schema.TypeList,
@@ -40,17 +40,17 @@ func dataSourceSonarqubeLanguages() *schema.Resource {
 					Schema: map[string]*schema.Schema{
 						"key": {
 							Type:        schema.TypeString,
-							Required:    true,
-							Description: "The key of the languagee",
+							Computed:    true,
+							Description: "The key of the languagee.",
 						},
 						"name": {
 							Type:        schema.TypeString,
 							Computed:    true,
-							Description: "The name of the language",
+							Description: "The name of the language.",
 						},
 					},
 				},
-				Description: "The list of languages",
+				Description: "The list of languages.",
 			},
 		},
 	}

@@ -48,7 +48,7 @@ func resourceSonarqubePermissions() *schema.Resource {
 				Optional:     true,
 				ForceNew:     true,
 				ExactlyOneOf: []string{"login_name", "group_name", "special_group_name"},
-				Description:  "The name of the Group that should get the specified permissions. Changing this forces a new resource to be created. Cannot be used with `login_name` and `special_group_name`",
+				Description:  "The name of the Group that should get the specified permissions. Changing this forces a new resource to be created. Cannot be used with `login_name` and `special_group_name`.",
 			},
 			"special_group_name": {
 				Type:         schema.TypeString,
@@ -68,21 +68,21 @@ func resourceSonarqubePermissions() *schema.Resource {
 				ForceNew:      true,
 				Optional:      true,
 				ConflictsWith: []string{"special_group_name", "template_id", "template_name"},
-				Description:   "Specify if you want to apply project level permissions. Changing this forces a new resource to be created. Cannot be used with `special_group_name`, `template_id` and `template_name`",
+				Description:   "Specify if you want to apply project level permissions. Changing this forces a new resource to be created. Cannot be used with `special_group_name`, `template_id` and `template_name`.",
 			},
 			"template_id": {
 				Type:          schema.TypeString,
 				ForceNew:      true,
 				Optional:      true,
 				ConflictsWith: []string{"project_key", "template_name"},
-				Description:   "Specify if you want to apply the permissions to a permission template. Changing this forces a new resource to be created. Cannot be used with `project_key` and `template_name`",
+				Description:   "Specify if you want to apply the permissions to a permission template. Changing this forces a new resource to be created. Cannot be used with `project_key` and `template_name`.",
 			},
 			"template_name": {
 				Type:          schema.TypeString,
 				ForceNew:      true,
 				Optional:      true,
 				ConflictsWith: []string{"project_key", "template_id"},
-				Description:   "Specify if you want to apply the permissions to a permission template. Changing this forces a new resource to be created. Cannot be used with `project_key` and `template_id`",
+				Description:   "Specify if you want to apply the permissions to a permission template. Changing this forces a new resource to be created. Cannot be used with `project_key` and `template_id`.",
 			},
 			"permissions": {
 				Type:     schema.TypeList,
