@@ -108,8 +108,10 @@ func Provider() *schema.Provider {
 		DataSourcesMap: map[string]*schema.Resource{
 			"sonarqube_user":                 dataSourceSonarqubeUser(),
 			"sonarqube_users":                dataSourceSonarqubeUsers(),
+			"sonarqube_user_tokens":          dataSourceSonarqubeUserTokens(),
 			"sonarqube_group":                dataSourceSonarqubeGroup(),
 			"sonarqube_groups":               dataSourceSonarqubeGroups(),
+			"sonarqube_group_members":        dataSourceSonarqubeGroupMembers(),
 			"sonarqube_project":              dataSourceSonarqubeProject(),
 			"sonarqube_portfolio":            dataSourceSonarqubePortfolio(),
 			"sonarqube_qualityprofile":       dataSourceSonarqubeQualityProfile(),
