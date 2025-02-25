@@ -25,6 +25,12 @@ func dataSourceSonarqubeGroupMembers() *schema.Resource {
 				Optional:    true,
 				Description: "To limit the search to a specific user.",
 			},
+			"ignore_missing": {
+				Type:        schema.TypeBool,
+				Default:     false,
+				Optional:    true,
+				Description: "If set to true, the data source will not fail if the group does not exist.",
+			},
 			"members": {
 				Type:     schema.TypeList,
 				Computed: true,
@@ -57,7 +63,11 @@ func dataSourceSonarqubeGroupMembersRead(d *schema.ResourceData, m interface{}) 
 		return err
 	}
 
-	d.Set("members", flattenReadGroupMembersResponse(groupMembersReadResponse.Members))
+	if groupMembersReadResponse != nil {
+		d.Set("members", flattenReadGroupMembersResponse(groupMembersReadResponse.Members))
+	} else {
+		d.Set("members", []interface{}{})
+	}
 
 	return nil
 }
@@ -85,6 +95,10 @@ func readGroupMembersFromApi(d *schema.ResourceData, m interface{}) (*GetGroupMe
 		"readGroupMembersFromApi",
 	)
 	if err != nil {
+		if resp.StatusCode == http.StatusNotFound && d.Get("ignore_missing").(bool) {
+			// If the group does not exist, we don't want to fail the data source
+			return nil, nil
+		}
 		return nil, fmt.Errorf("error reading Sonarqube group members: %+v", err)
 	}
 	defer resp.Body.Close()

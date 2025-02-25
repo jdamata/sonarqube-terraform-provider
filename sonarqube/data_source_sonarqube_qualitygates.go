@@ -21,6 +21,12 @@ func dataSourceSonarqubeQualityGates() *schema.Resource {
 				Required:    true,
 				Description: "Search quality gates by name.",
 			},
+			"ignore_missing": {
+				Type:        schema.TypeBool,
+				Default:     false,
+				Optional:    true,
+				Description: "If set to true, the data source will not fail if the quality gate does not exist.",
+			},
 			"quality_gates": {
 				Type:     schema.TypeList,
 				Computed: true,
@@ -116,8 +122,8 @@ func readQualityGatesFromApi(d *schema.ResourceData, m interface{}) (*GetQuality
 		"readQualityGatesFromApi",
 	)
 	if err != nil {
-		// We ignore the error if we didn't find any gate
-		if resp.StatusCode == http.StatusNotFound {
+		if resp.StatusCode == http.StatusNotFound && d.Get("ignore_missing").(bool) {
+			// If the quality gate does not exist, we don't want to fail the data source
 			return nil, nil
 		}
 		return nil, fmt.Errorf("error reading Sonarqube quality gates: %+v", err)

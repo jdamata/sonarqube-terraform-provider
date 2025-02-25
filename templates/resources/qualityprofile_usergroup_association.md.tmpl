@@ -1,0 +1,19 @@
+---
+page_title: "{{.Name}} {{.Type}} - {{.ProviderName}}"
+subcategory: ""
+description: |-
+{{ .Description | plainmarkdown | trimspace | prefixlines "  " }}
+---
+
+# {{.Name}} ({{.Type}})
+
+{{ .Description | trimspace }}
+
+## Example Usage
+### Example: create a quality profile user association
+{{ tffile "examples/resources/sonarqube_qualityprofile_usergroup_association/user-association.tf" }}
+
+### Example: create a quality profile group association
+{{ tffile "examples/resources/sonarqube_qualityprofile_usergroup_association/usergroup-association.tf" }}
+
+{{ .SchemaMarkdown | trimspace }}
