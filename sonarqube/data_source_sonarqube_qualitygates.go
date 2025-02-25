@@ -16,7 +16,7 @@ func dataSourceSonarqubeQualityGates() *schema.Resource {
 		Description: "Use this data source to get Sonarqube quality gates resources",
 		Read:        dataSourceSonarqubeQualityGatesRead,
 		Schema: map[string]*schema.Schema{
-			"search": {
+			"name": {
 				Type:        schema.TypeString,
 				Required:    true,
 				Description: "Search quality gates by name.",
@@ -86,7 +86,7 @@ func dataSourceSonarqubeQualityGates() *schema.Resource {
 }
 
 func dataSourceSonarqubeQualityGatesRead(d *schema.ResourceData, m interface{}) error {
-	d.SetId(fmt.Sprintf("%d", schema.HashString(d.Get("search"))))
+	d.SetId(fmt.Sprintf("%d", schema.HashString(d.Get("name"))))
 
 	qualityGateReadResponse, err := readQualityGatesFromApi(d, m)
 	if err != nil {
@@ -108,8 +108,8 @@ func readQualityGatesFromApi(d *schema.ResourceData, m interface{}) (*GetQuality
 
 	RawQuery := url.Values{}
 
-	if search, ok := d.GetOk("search"); ok {
-		RawQuery.Add("name", search.(string))
+	if name, ok := d.GetOk("name"); ok {
+		RawQuery.Add("name", name.(string))
 	}
 
 	sonarQubeURL.RawQuery = RawQuery.Encode()

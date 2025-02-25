@@ -37,14 +37,14 @@ func TestAccSonarqubeUserLocal(t *testing.T) {
 		Providers: testAccProviders,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccSonarqubeUserLocalConfig(rnd, "testAccSonarqubeUserLocal", "terraform-test@sonarqube.com", "secret-sauce37!"),
+				Config: testAccSonarqubeUserLocalConfig(rnd, "testAccSonarqubeUserLocal", "terraform-test@sonarqube.com", "secret-Sauce37!"),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(name, "name", "testAccSonarqubeUserLocal"),
 					resource.TestCheckResourceAttr(name, "email", "terraform-test@sonarqube.com"),
 				),
 			},
 			{
-				Config: testAccSonarqubeUserLocalConfig(rnd, "testAccSonarqubeUserLocal", "terraform-test2@sonarqube.com", "secret-sauce38!"),
+				Config: testAccSonarqubeUserLocalConfig(rnd, "testAccSonarqubeUserLocal", "terraform-test2@sonarqube.com", "secret-Sauce38!"),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(name, "name", "testAccSonarqubeUserLocal"),
 					resource.TestCheckResourceAttr(name, "email", "terraform-test2@sonarqube.com"),

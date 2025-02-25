@@ -65,7 +65,7 @@ func testAccSonarqubePermissionLoginNameConfig(id string, loginName string, perm
 		resource "sonarqube_user" "%[1]s" {
 			login_name = "%[2]s"
 			name       = "%[2]s"
-			password   = "secret-sauce37!"
+			password   = "secret-Sauce37!"
 		}
 
 		resource "sonarqube_permissions" "%[1]s" {
@@ -101,7 +101,7 @@ func testAccSonarqubePermissionLoginNameTemplateNameConfig(id string, loginName 
 		resource "sonarqube_user" "%[1]s" {
 			login_name = "%[2]s"
 			name       = "%[2]s"
-			password   = "secret-sauce37!"
+			password   = "secret-Sauce37!"
 		}
 
 		resource "sonarqube_permission_template" "this" {

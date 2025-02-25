@@ -15,7 +15,7 @@ Provides a Sonarqube User resource. This can be used to manage Sonarqube Users.
 resource "sonarqube_user" "user" {
   login_name = "terraform-test"
   name       = "terraform-test"
-  password   = "secret-sauce37!"
+  password   = "secret-Sauce37!"
 }
 ```
 

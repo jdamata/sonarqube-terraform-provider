@@ -7,7 +7,7 @@ resource "sonarqube_qualityprofile" "main" {
 resource "sonarqube_user" "qa_user" {
   login_name = "qa-user"
   name       = "qa-user"
-  password   = "secret-sauce37!"
+  password   = "secret-Sauce37!"
 }
 
 resource "sonarqube_qualityprofile_usergroup_association" "main" {
