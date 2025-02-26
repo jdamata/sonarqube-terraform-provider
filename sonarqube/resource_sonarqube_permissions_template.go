@@ -24,10 +24,17 @@ type GetPermissionTemplates struct {
 
 // PermissionTemplate struct
 type PermissionTemplate struct {
-	ID                string `json:"id,omitempty"`
-	Name              string `json:"name,omitempty"`
-	Description       string `json:"description,omitempty"`
-	ProjectKeyPattern string `json:"projectKeyPattern,omitempty"`
+	ID                string                         `json:"id,omitempty"`
+	Name              string                         `json:"name,omitempty"`
+	Description       string                         `json:"description,omitempty"`
+	ProjectKeyPattern string                         `json:"projectKeyPattern,omitempty"`
+	Permissions       []PermissionTemplatePermission `json:"permissions,omitempty"`
+}
+
+// PermissionTemplatePermission struct
+type PermissionTemplatePermission struct {
+	Key                string `json:"key,omitempty"`
+	WithProjectCreator bool   `json:"withProjectCreator,omitempty"`
 }
 
 // Returns the resource represented by this file.

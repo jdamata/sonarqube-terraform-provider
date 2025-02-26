@@ -207,6 +207,10 @@ func resourceSonarqubeGroupDelete(d *schema.ResourceData, m interface{}) error {
 }
 
 func resourceSonarqubeGroupImport(d *schema.ResourceData, m interface{}) ([]*schema.ResourceData, error) {
+	// no ID in the group search response from sonarqube 10.0+,
+	// so we have to recopy the given ID to the name for the import
+	d.Set("name", d.Id())
+
 	if err := resourceSonarqubeGroupRead(d, m); err != nil {
 		return nil, err
 	}

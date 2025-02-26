@@ -15,7 +15,7 @@ Provides a Sonarqube User token resource. This can be used to manage Sonarqube U
 resource "sonarqube_user" "user" {
   login_name = "terraform-test"
   name       = "terraform-test"
-  password   = "secret-sauce37!"
+  password   = "secret-Sauce37!"
 }
 
 resource "sonarqube_user_token" "token" {

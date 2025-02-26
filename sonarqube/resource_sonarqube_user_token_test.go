@@ -24,7 +24,7 @@ func testAccSonarqubeUserTokenBasicConfig(rnd string, name string) string {
         resource "sonarqube_user" "%[1]s" {
             login_name = "%[2]s"
             name       = "%[2]s"
-            password   = "secret-sauce37!"
+            password   = "secret-Sauce37!"
         }
         resource "sonarqube_user_token" "%[1]s" {
             login_name = sonarqube_user.%[1]s.login_name
@@ -55,7 +55,7 @@ func testAccSonarqubeUserTokenExpirationDateConfig(rnd string, name string, expi
         resource "sonarqube_user" "%[1]s" {
             login_name = "%[2]s"
             name       = "%[2]s"
-            password   = "secret-sauce37!"
+            password   = "secret-Sauce37!"
         }
         resource "sonarqube_user_token" "%[1]s" {
             login_name      = sonarqube_user.%[1]s.login_name
@@ -89,7 +89,7 @@ func testAccSonarqubeUserTokenNoLoginConfig(rnd string, name string) string {
         resource "sonarqube_user" "%[1]s" {
             login_name = "%[2]s"
             name       = "%[2]s"
-            password   = "secret-sauce37!"
+            password   = "secret-Sauce37!"
         }
         resource "sonarqube_user_token" "%[1]s" {
             name       = "%[2]s"
@@ -120,7 +120,7 @@ func testAccSonarqubeUserTokenGlobalAnalysisTokenConfig(rnd string, name string)
         resource "sonarqube_user" "%[1]s" {
             login_name = "%[2]s"
             name       = "%[2]s"
-            password   = "secret-sauce37!"
+            password   = "secret-Sauce37!"
         }
         resource "sonarqube_user_token" "%[1]s" {
             name       = "%[2]s"
@@ -152,7 +152,7 @@ func testAccSonarqubeUserTokenProjectAnalysisTokenConfig(rnd string, name string
         resource "sonarqube_user" "%[1]s" {
             login_name = "%[2]s"
             name       = "%[2]s"
-            password   = "secret-sauce37!"
+            password   = "secret-Sauce37!"
         }
         resource "sonarqube_user_token" "%[1]s" {
             name        = "%[2]s"
