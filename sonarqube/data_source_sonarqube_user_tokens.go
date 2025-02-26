@@ -21,6 +21,12 @@ func dataSourceSonarqubeUserTokens() *schema.Resource {
 				Optional:    true,
 				Description: "Search user tokens for the specified login name. Otherwise, tokens for the current user are listed. This login must exist and be active.",
 			},
+			"ignore_missing": {
+				Type:        schema.TypeBool,
+				Default:     false,
+				Optional:    true,
+				Description: "If set to true, the data source will not fail if the user does not exist.",
+			},
 			"user_tokens": {
 				Type:     schema.TypeList,
 				Computed: true,
@@ -74,12 +80,16 @@ func dataSourceSonarqubeUserTokensRead(d *schema.ResourceData, m interface{}) er
 		return err
 	}
 
-	userTokens, err := flattenReadUserTokensResponse(userTokensReadResponse.Login, userTokensReadResponse.Tokens)
-	if err != nil {
-		return err
-	}
+	if userTokensReadResponse != nil {
+		userTokens, err := flattenReadUserTokensResponse(userTokensReadResponse.Login, userTokensReadResponse.Tokens)
+		if err != nil {
+			return err
+		}
 
-	d.Set("user_tokens", userTokens)
+		d.Set("user_tokens", userTokens)
+	} else {
+		d.Set("user_tokens", []interface{}{})
+	}
 
 	return nil
 }
@@ -104,6 +114,10 @@ func readUserTokensFromApi(d *schema.ResourceData, m interface{}) (*GetTokens, e
 		"readUserTokensFromApi",
 	)
 	if err != nil {
+		if resp.StatusCode == http.StatusNotFound && d.Get("ignore_missing").(bool) {
+			// If the user does not exist, we don't want to fail the data source
+			return nil, nil
+		}
 		return nil, fmt.Errorf("error reading Sonarqube user tokens: %+v", err)
 	}
 	defer resp.Body.Close()

@@ -23,6 +23,7 @@ data "sonarqube_user_tokens" "user_tokens_admin" {
 
 ### Optional
 
+- `ignore_missing` (Boolean) If set to true, the data source will not fail if the user does not exist.
 - `login_name` (String) Search user tokens for the specified login name. Otherwise, tokens for the current user are listed. This login must exist and be active.
 
 ### Read-Only
